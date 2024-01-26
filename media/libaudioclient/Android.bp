@@ -156,6 +156,7 @@ cc_library {
         "framework-permission-aidl-cpp",
         "libbinder",
         "libmediametrics",
+        "libmediautils",
         "spatializer-aidl-cpp",
     ],
 
