@@ -33,6 +33,7 @@
 #include <audio_utils/FdToString.h>
 #include <audio_utils/SimpleLog.h>
 #include <media/IAudioFlinger.h>
+#include <media/IAudioPolicyServiceLocal.h>
 #include <media/MediaMetricsItem.h>
 #include <media/audiohal/DevicesFactoryHalInterface.h>
 #include <mediautils/ServiceUtilities.h>
@@ -261,6 +262,10 @@ private:
     status_t getAudioMixPort(const struct audio_port_v7* devicePort,
                              struct audio_port_v7* mixPort) const final EXCLUDES_AudioFlinger_Mutex;
 
+    status_t setTracksInternalMute(
+            const std::vector<media::TrackInternalMuteInfo>& tracksInternalMute) final
+            EXCLUDES_AudioFlinger_Mutex;
+
     status_t onTransactWrapper(TransactionCode code, const Parcel& data, uint32_t flags,
             const std::function<status_t()>& delegate) final EXCLUDES_AudioFlinger_Mutex;
 
@@ -375,7 +380,8 @@ private:
             EXCLUDES_AudioFlinger_Mutex;
 
     status_t moveEffectChain_ll(audio_session_t sessionId,
-            IAfPlaybackThread* srcThread, IAfPlaybackThread* dstThread) final
+            IAfPlaybackThread* srcThread, IAfPlaybackThread* dstThread,
+            IAfEffectChain* srcChain = nullptr) final
             REQUIRES(mutex(), audio_utils::ThreadBase_Mutex);
 
     // This is a helper that is called during incoming binder calls.
@@ -423,6 +429,13 @@ public:
                             const sp<MmapStreamCallback>& callback,
                             sp<MmapStreamInterface>& interface,
             audio_port_handle_t *handle) EXCLUDES_AudioFlinger_Mutex;
+
+    void initAudioPolicyLocal(sp<media::IAudioPolicyServiceLocal> audioPolicyLocal) {
+        if (mAudioPolicyServiceLocal.load() == nullptr) {
+            mAudioPolicyServiceLocal = std::move(audioPolicyLocal);
+        }
+    }
+
 private:
     // FIXME The 400 is temporarily too high until a leak of writers in media.log is fixed.
     static const size_t kLogMemorySize = 400 * 1024;
@@ -710,6 +723,16 @@ private:
 
     sp<Client> registerPid(pid_t pid) EXCLUDES_AudioFlinger_ClientMutex; // always returns non-0
 
+    sp<IAfEffectHandle> createOrphanEffect_l(const sp<Client>& client,
+                                          const sp<media::IEffectClient>& effectClient,
+                                          int32_t priority,
+                                          audio_session_t sessionId,
+                                          effect_descriptor_t *desc,
+                                          int *enabled,
+                                          status_t *status /*non-NULL*/,
+                                          bool pinned,
+                                          bool notifyFramesProcessed) REQUIRES(mutex());
+
     // for use from destructor
     status_t closeOutput_nonvirtual(audio_io_handle_t output) EXCLUDES_AudioFlinger_Mutex;
     status_t closeInput_nonvirtual(audio_io_handle_t input) EXCLUDES_AudioFlinger_Mutex;
@@ -771,6 +794,9 @@ private:
 
     // Bluetooth Variable latency control logic is enabled or disabled
     std::atomic<bool> mBluetoothLatencyModesEnabled = true;
+
+    // Local interface to AudioPolicyService, late inited, but logically const
+    mediautils::atomic_sp<media::IAudioPolicyServiceLocal> mAudioPolicyServiceLocal;
 };
 
 // ----------------------------------------------------------------------------

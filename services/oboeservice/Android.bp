@@ -98,7 +98,6 @@ cc_defaults {
         "libmediautils",
         "libutils",
         "packagemanager_aidl-cpp",
-        "com.android.media.aaudio-aconfig-cc",
     ],
 
     static_libs: [
