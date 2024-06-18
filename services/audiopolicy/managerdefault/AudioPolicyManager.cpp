@@ -6690,6 +6690,14 @@ void AudioPolicyManager::onNewAudioModulesAvailableInt(DeviceVector *newDevices)
             if (!mConfig->getOutputDevices().contains(supportedDevice)) {
                 continue;
             }
+
+            if (outProfile->isMmap() && !outProfile->hasDynamicAudioProfile()
+                && availProfileDevices.areAllDevicesAttached()) {
+                ALOGV("%s skip opening output for mmap profile %s", __func__,
+                        outProfile->getTagName().c_str());
+                continue;
+            }
+
             sp<SwAudioOutputDescriptor> outputDesc = new SwAudioOutputDescriptor(outProfile,
                                                                                  mpClientInterface);
             audio_io_handle_t output = AUDIO_IO_HANDLE_NONE;
@@ -6749,6 +6757,14 @@ void AudioPolicyManager::onNewAudioModulesAvailableInt(DeviceVector *newDevices)
                     __func__, inProfile->getTagName().c_str());
                 continue;
             }
+
+            if (inProfile->isMmap() && !inProfile->hasDynamicAudioProfile()
+                && availProfileDevices.areAllDevicesAttached()) {
+                ALOGV("%s skip opening input for mmap profile %s", __func__,
+                        inProfile->getTagName().c_str());
+                continue;
+            }
+
             sp<AudioInputDescriptor> inputDesc = new AudioInputDescriptor(
                     inProfile, mpClientInterface, false /*isPreemptor*/);
 
@@ -6903,7 +6919,11 @@ status_t AudioPolicyManager::checkOutputsForDevice(const sp<DeviceDescriptor>& d
             if (j != outputs.size()) {
                 continue;
             }
-
+            if (profile->isMmap() && !profile->hasDynamicAudioProfile()) {
+                ALOGV("%s skip opening output for mmap profile %s",
+                      __func__, profile->getTagName().c_str());
+                continue;
+            }
             if (!profile->canOpenNewIo()) {
                 ALOGW("Max Output number %u already opened for this profile %s",
                       profile->maxOpenCount, profile->getTagName().c_str());
@@ -7054,6 +7074,11 @@ status_t AudioPolicyManager::checkInputsForDevice(const sp<DeviceDescriptor>& de
                 continue;
             }
 
+            if (profile->isMmap() && !profile->hasDynamicAudioProfile()) {
+                ALOGV("%s skip opening input for mmap profile %s",
+                      __func__, profile->getTagName().c_str());
+                continue;
+            }
             if (!profile->canOpenNewIo()) {
                 ALOGW("Max Input number %u already opened for this profile %s",
                       profile->maxOpenCount, profile->getTagName().c_str());
