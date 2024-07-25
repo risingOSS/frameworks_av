@@ -18,6 +18,7 @@
 
 #define CODEC_CAPABILITIES_H_
 
+#include <media/AudioCapabilities.h>
 #include <media/CodecCapabilitiesUtils.h>
 #include <media/stagefright/foundation/ABase.h>
 #include <media/stagefright/foundation/AMessage.h>
@@ -32,6 +33,25 @@
 namespace android {
 
 struct CodecCapabilities {
+
+    static bool SupportsBitrate(Range<int> bitrateRange,
+            const sp<AMessage> &format);
+
+    /**
+     * Returns the media type for which this codec-capability object was created.
+     */
+    const std::string& getMediaType();
+
+    /**
+     * Returns the supported profile levels.
+     */
+    const std::vector<ProfileLevel>& getProfileLevels();
+
+private:
+    std::string mMediaType;
+    std::vector<ProfileLevel> mProfileLevels;
+
+    std::shared_ptr<AudioCapabilities> mAudioCaps;
 };
 
 }  // namespace android
