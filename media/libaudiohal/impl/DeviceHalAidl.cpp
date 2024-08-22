@@ -478,7 +478,7 @@ status_t DeviceHalAidl::openOutputStream(
     int32_t aidlOutputFlags = VALUE_OR_RETURN_STATUS(
             ::aidl::android::legacy2aidl_audio_output_flags_t_int32_t_mask(flags));
     SourceMetadata aidlMetadata = VALUE_OR_RETURN_STATUS(
-            ::aidl::android::legacy2aidl_SourceMetadata(sourceMetadata));
+            ::aidl::android::legacy2aidl_playback_track_metadata_v7_SourceMetadata(sourceMetadata));
     AudioIoFlags aidlFlags = AudioIoFlags::make<AudioIoFlags::Tag::output>(aidlOutputFlags);
     AudioPortConfig mixPortConfig;
     AudioPatch aidlPatch;
