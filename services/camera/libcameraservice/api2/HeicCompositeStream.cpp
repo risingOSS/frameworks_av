@@ -1297,7 +1297,9 @@ void HeicCompositeStream::releaseInputFramesLocked() {
         if (firstPendingFrame != mPendingInputFrames.end()) {
             updateCodecQualityLocked(firstPendingFrame->second.quality);
         } else {
-            markTrackerIdle();
+            if (mSettingsByFrameNumber.size() == 0) {
+                markTrackerIdle();
+            }
         }
     }
 }
@@ -1723,7 +1725,9 @@ bool HeicCompositeStream::threadLoop() {
                     // removed, they are simply skipped.
                     mPendingInputFrames.erase(failingFrameNumber);
                     if (mPendingInputFrames.size() == 0) {
-                        markTrackerIdle();
+                        if (mSettingsByFrameNumber.size() == 0) {
+                            markTrackerIdle();
+                        }
                     }
                     return true;
                 }
