@@ -777,8 +777,6 @@ private:
     bool mSystemReady GUARDED_BY(mutex()) = false;
     std::atomic<bool> mAudioPolicyReady = false;
 
-    mediautils::UidInfo mUidInfo GUARDED_BY(mutex());
-
     // no mutex needed.
     SimpleLog  mRejectedSetParameterLog;
     SimpleLog  mAppSetParameterLog;

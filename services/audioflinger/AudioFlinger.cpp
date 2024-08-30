@@ -754,17 +754,19 @@ void AudioFlinger::dumpClients_ll(int fd, const Vector<String16>& args __unused)
     for (size_t i = 0; i < mNotificationClients.size(); ++i) {
         const pid_t pid = mNotificationClients[i]->getPid();
         const uid_t uid = mNotificationClients[i]->getUid();
-        const mediautils::UidInfo::Info info = mUidInfo.getInfo(uid);
-        result.appendFormat("%6d %6u  %s\n", pid, uid, info.package.c_str());
+        const std::shared_ptr<const mediautils::UidInfo::Info> info =
+                mediautils::UidInfo::getInfo(uid);
+        result.appendFormat("%6d %6u  %s\n", pid, uid, info->package.c_str());
     }
 
     result.append("Global session refs:\n");
     result.append("  session  cnt     pid    uid  name\n");
     for (size_t i = 0; i < mAudioSessionRefs.size(); i++) {
         AudioSessionRef *r = mAudioSessionRefs[i];
-        const mediautils::UidInfo::Info info = mUidInfo.getInfo(r->mUid);
+        const std::shared_ptr<const mediautils::UidInfo::Info> info =
+                mediautils::UidInfo::getInfo(r->mUid);
         result.appendFormat("  %7d %4d %7d %6u  %s\n", r->mSessionid, r->mCnt, r->mPid,
-                r->mUid, info.package.c_str());
+                r->mUid, info->package.c_str());
     }
     write(fd, result.c_str(), result.size());
 }
