@@ -1196,6 +1196,8 @@ String16 ThreadBase::getWakeLockTag()
         return String16("MmapCapture");
     case SPATIALIZER:
         return String16("AudioSpatial");
+    case BIT_PERFECT:
+        return String16("AudioBitPerfect");
     default:
         ALOG_ASSERT(false);
         return String16("AudioUnknown");
