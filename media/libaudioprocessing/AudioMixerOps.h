@@ -19,6 +19,7 @@
 
 #include <audio_utils/channels.h>
 #include <audio_utils/primitives.h>
+#include <media/AudioNeonCal.h>
 #include <system/audio.h>
 
 #if defined(__aarch64__) || defined(__ARM_NEON__)
@@ -31,8 +32,6 @@
 #if USE_NEON
 #include <arm_neon.h>
 #endif
-
-#include "AudioNeonCal.h"
 
 namespace android {
 

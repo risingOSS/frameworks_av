@@ -25,11 +25,10 @@
 #include <audio_utils/primitives.h>
 #include <cutils/compiler.h>
 #include <media/AudioMixerBase.h>
+#include <media/AudioNeonCal.h>
 #include <utils/Log.h>
 
 #include "AudioMixerOps.h"
-
-#include "AudioNeonCal.h"
 
 // The FCC_2 macro refers to the Fixed Channel Count of 2 for the legacy integer mixer.
 #ifndef FCC_2

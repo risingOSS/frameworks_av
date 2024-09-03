@@ -27,10 +27,9 @@
 #include <media/AudioBufferProvider.h>
 #include <media/AudioResampler.h>
 #include <media/AudioResamplerPublic.h>
+#include <media/AudioNeonCal.h>
 #include <system/audio.h>
 #include <utils/Compat.h>
-
-#include "AudioNeonCal.h"
 
 // This must match frameworks/av/services/audioflinger/Configuration.h
 // when used with the Audio Framework.
