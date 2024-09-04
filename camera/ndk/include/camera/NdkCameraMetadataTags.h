@@ -2294,8 +2294,6 @@ typedef enum acamera_metadata_tag {
      * boost when the light level threshold is exceeded.</p>
      * <p>This state indicates when low light boost is 'ACTIVE' and applied. Similarly, it can
      * indicate when it is not being applied by returning 'INACTIVE'.</p>
-     * <p>This key will be absent from the CaptureResult if AE mode is not set to
-     * 'ON_LOW_LIGHT_BOOST_BRIGHTNESS_PRIORITY.</p>
      * <p>The default value will always be 'INACTIVE'.</p>
      */
     ACAMERA_CONTROL_LOW_LIGHT_BOOST_STATE =                     // byte (acamera_metadata_enum_android_control_low_light_boost_state_t)
