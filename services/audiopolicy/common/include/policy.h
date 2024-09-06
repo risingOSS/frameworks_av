@@ -17,6 +17,7 @@
 #pragma once
 
 #include <system/audio.h>
+#include <set>
 #include <vector>
 
 #include <media/AudioContainers.h>
@@ -45,6 +46,10 @@ enum legacy_strategy {
 };
 
 static const audio_attributes_t defaultAttr = AUDIO_ATTRIBUTES_INITIALIZER;
+
+static const std::set<audio_usage_t > gHighPriorityUseCases = {
+        AUDIO_USAGE_ALARM, AUDIO_USAGE_NOTIFICATION_TELEPHONY_RINGTONE
+};
 
 } // namespace android
 
