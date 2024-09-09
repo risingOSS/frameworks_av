@@ -4348,14 +4348,9 @@ status_t CameraService::BasicClient::startCameraOps() {
         // Notify app ops that the camera is not available
         mOpsCallback = new OpsCallback(this);
 
-        if (flags::watch_foreground_changes()) {
-            mAppOpsManager->startWatchingMode(AppOpsManager::OP_CAMERA,
-                toString16(mClientPackageName),
-                AppOpsManager::WATCH_FOREGROUND_CHANGES, mOpsCallback);
-        } else {
-            mAppOpsManager->startWatchingMode(AppOpsManager::OP_CAMERA,
-                toString16(mClientPackageName), mOpsCallback);
-        }
+        mAppOpsManager->startWatchingMode(AppOpsManager::OP_CAMERA,
+            toString16(mClientPackageName),
+            AppOpsManager::WATCH_FOREGROUND_CHANGES, mOpsCallback);
 
         // Just check for camera acccess here on open - delay startOp until
         // camera frames start streaming in startCameraStreamingOps
@@ -4538,19 +4533,10 @@ void CameraService::BasicClient::opChanged(int32_t op, const String16&) {
         // (WAR for b/175320666)the AppOpsManager could return MODE_IGNORED. Do not treat such
         // cases as error.
         if (!mUidIsTrusted) {
-            if (flags::watch_foreground_changes()) {
-                if (isUidVisible && isCameraPrivacyEnabled && supportsCameraMute()) {
-                    setCameraMute(true);
-                } else {
-                    block();
-                }
+            if (isUidVisible && isCameraPrivacyEnabled && supportsCameraMute()) {
+                setCameraMute(true);
             } else {
-                if (isUidActive && isCameraPrivacyEnabled && supportsCameraMute()) {
-                    setCameraMute(true);
-                } else if (!isUidActive
-                    || (isCameraPrivacyEnabled && !supportsCameraMute())) {
-                    block();
-                }
+                block();
             }
         }
     } else if (res == AppOpsManager::MODE_ALLOWED) {
