@@ -828,10 +828,6 @@ Status CameraService::createDefaultRequest(const std::string& unresolvedCameraId
         hardware::camera2::impl::CameraMetadataNative* request) {
     ATRACE_CALL();
 
-    if (!flags::feature_combination_query()) {
-        return STATUS_ERROR(CameraService::ERROR_INVALID_OPERATION,
-                "Camera subsystem doesn't support this method!");
-    }
     if (!mInitialized) {
         ALOGE("%s: Camera subsystem is not available", __FUNCTION__);
         logServiceError("Camera subsystem is not available", ERROR_DISCONNECTED);
@@ -891,10 +887,6 @@ Status CameraService::isSessionConfigurationWithParametersSupported(
         /*out*/ bool* supported) {
     ATRACE_CALL();
 
-    if (!flags::feature_combination_query()) {
-        return STATUS_ERROR(CameraService::ERROR_INVALID_OPERATION,
-                "Camera subsystem doesn't support this method!");
-    }
     if (!mInitialized) {
         ALOGE("%s: Camera HAL couldn't be initialized", __FUNCTION__);
         logServiceError("Camera subsystem is not available", ERROR_DISCONNECTED);
