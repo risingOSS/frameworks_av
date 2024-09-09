@@ -49,13 +49,6 @@ flag {
 
 flag {
     namespace: "camera_platform"
-    name: "log_zoom_override_usage"
-    description: "Enable measuring how much usage there is for zoom settings overrde"
-    bug: "307409002"
-}
-
-flag {
-    namespace: "camera_platform"
     name: "session_hal_buf_manager"
     description: "Enable or disable HAL buffer manager as requested by the camera HAL"
     bug: "311263114"
