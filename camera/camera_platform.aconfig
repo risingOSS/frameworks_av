@@ -27,13 +27,6 @@ flag {
 
 flag {
     namespace: "camera_platform"
-    name: "watch_foreground_changes"
-    description: "Request AppOps to notify changes in the foreground status of the client"
-    bug: "290086710"
-}
-
-flag {
-    namespace: "camera_platform"
     name: "camera_manual_flash_strength_control"
     is_exported: true
     description: "Flash brightness level control in manual flash mode"
