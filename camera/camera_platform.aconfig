@@ -189,16 +189,6 @@ flag {
 
 flag {
     namespace: "camera_platform"
-    name: "realtime_priority_bump"
-    description: "Bump the scheduling priority of performance critical code paths"
-    bug: "336628522"
-    metadata {
-        purpose: PURPOSE_BUGFIX
-    }
-}
-
-flag {
-    namespace: "camera_platform"
     name: "use_system_api_for_vndk_version"
     description: "ro.board.api_level isn't reliable. Use system api to replace ro.vndk.version"
     bug: "312315580"
