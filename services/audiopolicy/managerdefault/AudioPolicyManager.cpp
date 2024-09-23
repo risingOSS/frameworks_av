@@ -4386,8 +4386,9 @@ void AudioPolicyManager::updateCallAndOutputRouting(bool forceVolumeReeval, uint
             // As done in setDeviceConnectionState, we could also fix default device issue by
             // preventing the force re-routing in case of default dev that distinguishes on address.
             // Let's give back to engine full device choice decision however.
-            bool forceRouting = !newDevices.isEmpty();
-            if (outputDesc->mPreferredAttrInfo != nullptr && newDevices != outputDesc->devices()) {
+            bool newDevicesNotEmpty = !newDevices.isEmpty();
+            if (outputDesc->mPreferredAttrInfo != nullptr && newDevices != outputDesc->devices()
+                && newDevicesNotEmpty) {
                 // If the device is using preferred mixer attributes, the output need to reopen
                 // with default configuration when the new selected devices are different from
                 // current routing devices.
@@ -4395,9 +4396,10 @@ void AudioPolicyManager::updateCallAndOutputRouting(bool forceVolumeReeval, uint
                 continue;
             }
 
-            waitMs = setOutputDevices(__func__, outputDesc, newDevices, forceRouting, delayMs,
-                                       nullptr, !skipDelays /*requiresMuteCheck*/,
-                                      !forceRouting /*requiresVolumeCheck*/, skipDelays);
+            waitMs = setOutputDevices(__func__, outputDesc, newDevices,
+                                      newDevicesNotEmpty /*force*/, delayMs,
+                                      nullptr /*patchHandle*/, !skipDelays /*requiresMuteCheck*/,
+                                      !newDevicesNotEmpty /*requiresVolumeCheck*/, skipDelays);
             // Only apply special touch sound delay once
             delayMs = 0;
         }
