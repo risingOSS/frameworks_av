@@ -2954,6 +2954,16 @@ static const effect_uuid_t SL_IID_VOLUME_ = { 0x09e8ede0, 0xddde, 0x11db, 0xb4f6
 const effect_uuid_t * const SL_IID_VOLUME = &SL_IID_VOLUME_;
 #endif //OPENSL_ES_H_
 
+#ifndef OPENSL_ES_H_
+static const effect_uuid_t SL_IID_BASSBOOST_ = { 0x0634f220, 0xddd4, 0x11db, 0xa0fc,
+        { 0x00, 0x02, 0xa5, 0xd5, 0xc5, 0x1b } };
+const effect_uuid_t * const SL_IID_BASSBOOST = &SL_IID_BASSBOOST_;
+#endif //OPENSL_ES_H_
+
+static const effect_uuid_t FX_IID_LOUDNESS_ENHANCER_ =
+        {0xfe3199be, 0xaed0, 0x413f, 0x87bb, {0x11, 0x26, 0x0e, 0xb6, 0x3c, 0xf1}};
+const effect_uuid_t * const FX_IID_LOUDNESS_ENHANCER = &FX_IID_LOUDNESS_ENHANCER_;
+
 // Dolby Atmos
 static const effect_uuid_t SL_IID_DAP_ = // 46d279d9-9be7-453d-9d7c-ef937f675587
 { 0x46d279d9, 0x9be7, 0x453d, 0x9d7c, {0xef, 0x93, 0x7f, 0x67, 0x55, 0x87} };
@@ -2977,6 +2987,8 @@ bool EffectChain::isEffectEligibleForSuspend(const effect_descriptor_t& desc)
          (memcmp(&desc.type, SL_IID_VISUALIZATION, sizeof(effect_uuid_t)) == 0) ||
          (memcmp(&desc.type, SL_IID_VOLUME, sizeof(effect_uuid_t)) == 0) ||
          (memcmp(&desc.type, SL_IID_DYNAMICSPROCESSING, sizeof(effect_uuid_t)) == 0) ||
+         (memcmp(&desc.type, FX_IID_LOUDNESS_ENHANCER, sizeof(effect_uuid_t)) == 0) ||
+         (memcmp(&desc.type, SL_IID_BASSBOOST, sizeof(effect_uuid_t)) == 0) ||
          (memcmp(&desc.type, SL_IID_DAP, sizeof(effect_uuid_t)) == 0))) {
         return false;
     }
